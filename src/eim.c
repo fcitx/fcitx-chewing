@@ -189,11 +189,9 @@ INPUT_RETURN_VALUE FcitxChewingDoInput(void* arg, FcitxKeySym sym, unsigned int 
         // to do: more chewing_handle, but all useful keys are defined
         return IRV_TO_PROCESS;
     }
-    if (chewing_keystroke_CheckAbsorb(c)) {
-        return IRV_DISPLAY_CANDWORDS;
-    } else if (chewing_keystroke_CheckIgnore(c)) {
+    if (chewing_keystroke_CheckIgnore(c)) { //hit enter, but chewing has nothing to do (ignore)
         return IRV_TO_PROCESS;
-    } else if (chewing_commit_Check(c)) {
+    } else if (chewing_commit_Check(c)) { //hit enter, has commit string
         char* str = chewing_commit_String(c);
         strcpy(FcitxInputStateGetOutputString(input), str);
         chewing_free(str);
@@ -241,16 +239,16 @@ INPUT_RETURN_VALUE FcitxChewingGetCandWords(void* arg)
     ChewingContext * c = chewing->context;
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(chewing->owner);
     
+    //reload cand conf
     chewing_set_candPerPage(c, config->iMaxCandWord);
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
+    ConfigChewing(chewing);
 
     //clean up window asap
     FcitxInstanceCleanInputWindowUp(chewing->owner);
 
     char * buf_str = chewing_buffer_String(c);
     char * zuin_str = chewing_zuin_String(c, NULL);
-    ConfigChewing(chewing);
-
     FcitxLog(DEBUG, "%s %s", buf_str, zuin_str);
 
 	//get candidate word
@@ -293,29 +291,28 @@ INPUT_RETURN_VALUE FcitxChewingGetCandWord(void* arg, FcitxCandidateWord* candWo
 {
     FcitxChewing* chewing = (FcitxChewing*) candWord->owner;
     ChewingCandWord* w = (ChewingCandWord*) candWord->priv;
+    ChewingContext* c = chewing->context;
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(chewing->owner);
     FcitxInputState *input = FcitxInstanceGetInputState(chewing->owner);
     int page = w->index / config->iMaxCandWord;
     int off = w->index % config->iMaxCandWord;
     
-    if (page < 0 || page >= chewing_cand_TotalPage(chewing->context))
+    if (page < 0 || page >= chewing_cand_TotalPage(c))
         return IRV_TO_PROCESS;
-    while (page != chewing_cand_CurrentPage(chewing->context)) {
-        if (page < chewing_cand_CurrentPage(chewing->context)) {
-            chewing_handle_Left(chewing->context);
+    while (page != chewing_cand_CurrentPage(c)) {
+        if (page < chewing_cand_CurrentPage(c)) {
+            chewing_handle_Left(c);
         }
-        if (page > chewing_cand_CurrentPage(chewing->context)) {
-            chewing_handle_Right(chewing->context);
+        if (page > chewing_cand_CurrentPage(c)) {
+            chewing_handle_Right(c);
         }
     }
-    chewing_handle_Default( chewing->context, selKey[off] );
+    chewing_handle_Default(c, selKey[off] );
     
-    if (chewing_keystroke_CheckAbsorb(chewing->context)) {
-        return IRV_DISPLAY_CANDWORDS;
-    } else if (chewing_keystroke_CheckIgnore(chewing->context)) {
+    if (chewing_keystroke_CheckIgnore(c)) {
         return IRV_TO_PROCESS;
-    } else if (chewing_commit_Check(chewing->context)) {
-        char* str = chewing_commit_String(chewing->context);
+    } else if (chewing_commit_Check(c)) {
+        char* str = chewing_commit_String(c);
         strcpy(FcitxInputStateGetOutputString(input), str);
         chewing_free(str);
         return IRV_COMMIT_STRING;
