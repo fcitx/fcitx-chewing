@@ -54,7 +54,7 @@ static INPUT_RETURN_VALUE FcitxChewingGetCandWord(void* arg, FcitxCandidateWord*
 static void FcitxChewingReloadConfig(void* arg);
 static boolean LoadChewingConfig(FcitxChewingConfig* fs);
 static void SaveChewingConfig(FcitxChewingConfig* fs);
-static void ConfigChewing(FcitxChewing* anthy);
+static void ConfigChewing(FcitxChewing* chewing);
 
 typedef struct _ChewingCandWord {
     int index;
