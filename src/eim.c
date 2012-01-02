@@ -159,9 +159,6 @@ INPUT_RETURN_VALUE FcitxChewingDoInput(void* arg, FcitxKeySym sym, unsigned int 
     FcitxChewing* chewing = (FcitxChewing*) arg;
     FcitxInputState *input = FcitxInstanceGetInputState(chewing->owner);
     ChewingContext * c = chewing->context;
-    
-    if (FcitxHotkeyIsHotKeyDigit(sym, state) && chewing_cand_CheckDone(c))
-        return IRV_TO_PROCESS;
 
     if (FcitxHotkeyIsHotKeySimple(sym, state)) {
         int scan_code = (int) sym & 0xff;
@@ -256,27 +253,24 @@ INPUT_RETURN_VALUE FcitxChewingGetCandWords(void* arg)
 
     FcitxLog(DEBUG, "%s %s", buf_str, zuin_str);
 
-    /* if not check done, so there is candidate word */
-    if (!chewing_cand_CheckDone(c)) {
-        //get candidate word
-        chewing_cand_Enumerate(c);
-        int index = 0;
-        while (chewing_cand_hasNext(c)) {
-            char* str = chewing_cand_String(c);
-            FcitxCandidateWord cw;
-            ChewingCandWord* w = (ChewingCandWord*) fcitx_utils_malloc0(sizeof(ChewingCandWord));
-            w->index = index;
-            cw.callback = FcitxChewingGetCandWord;
-            cw.owner = chewing;
-            cw.priv = w;
-            cw.strExtra = NULL;
-            cw.strWord = strdup(str);
-            cw.wordType = MSG_OTHER;
-            FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &cw);
-            chewing_free(str);
-            index ++;
-        }
-    }
+	//get candidate word
+	chewing_cand_Enumerate(c);
+	int index = 0;
+	while (chewing_cand_hasNext(c)) {
+		char* str = chewing_cand_String(c);
+		FcitxCandidateWord cw;
+		ChewingCandWord* w = (ChewingCandWord*) fcitx_utils_malloc0(sizeof(ChewingCandWord));
+		w->index = index;
+		cw.callback = FcitxChewingGetCandWord;
+		cw.owner = chewing;
+		cw.priv = w;
+		cw.strExtra = NULL;
+		cw.strWord = strdup(str);
+		cw.wordType = MSG_OTHER;
+		FcitxCandidateWordAppend(FcitxInputStateGetCandidateList(input), &cw);
+		chewing_free(str);
+		index ++;
+	}
 
     // setup cursor
     FcitxInputStateSetShowCursor(input, true);
