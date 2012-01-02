@@ -52,7 +52,7 @@ CONFIG_DESC_DEFINE(GetFcitxChewingConfigDesc, "fcitx-chewing.desc")
 static int FcitxChewingGetRawCursorPos(char * str, int upos);
 static INPUT_RETURN_VALUE FcitxChewingGetCandWord(void* arg, FcitxCandidateWord* candWord);
 static void FcitxChewingReloadConfig(void* arg);
-boolean LoadChewingConfig(FcitxChewingConfig* fs);
+static boolean LoadChewingConfig(FcitxChewingConfig* fs);
 static void SaveChewingConfig(FcitxChewingConfig* fs);
 static void ConfigChewing(FcitxChewing* anthy);
 
@@ -62,8 +62,8 @@ typedef struct _ChewingCandWord {
 
 const FcitxHotkey FCITX_CHEWING_UP[2] = {{NULL, FcitxKey_Up, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
 const FcitxHotkey FCITX_CHEWING_DOWN[2] = {{NULL, FcitxKey_Down, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
-FcitxHotkey FCITX_CHEWING_PGUP[2] = {{NULL, FcitxKey_Page_Up, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
-FcitxHotkey FCITX_CHEWING_PGDN[2] = {{NULL, FcitxKey_Page_Down, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
+const FcitxHotkey FCITX_CHEWING_PGUP[2] = {{NULL, FcitxKey_Page_Up, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
+const FcitxHotkey FCITX_CHEWING_PGDN[2] = {{NULL, FcitxKey_Page_Down, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
 int selKey[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
 
 const char *builtin_keymaps[] = {
@@ -108,6 +108,8 @@ void* FcitxChewingCreate(FcitxInstance* instance)
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
+    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCITX_LEFT);
+    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCITX_RIGHT);
     
     bindtextdomain("fcitx-chewing", LOCALEDIR);
 
@@ -166,6 +168,8 @@ INPUT_RETURN_VALUE FcitxChewingDoInput(void* arg, FcitxKeySym sym, unsigned int 
         chewing_handle_Default(c, scan_code);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_BACKSPACE)) {
         chewing_handle_Backspace(c);
+    } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ESCAPE)) {
+        chewing_handle_Esc(c);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_DELETE)) {
         chewing_handle_Del(c);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_SPACE)) {
@@ -179,15 +183,13 @@ INPUT_RETURN_VALUE FcitxChewingDoInput(void* arg, FcitxKeySym sym, unsigned int 
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_CHEWING_PGDN)) {
         chewing_handle_PageUp(c);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_RIGHT)) {
-        return IRV_TO_PROCESS;
+        chewing_handle_Right(c);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_LEFT)) {
-        return IRV_TO_PROCESS;
+        chewing_handle_Left(c);
     } else if (FcitxHotkeyIsHotKey(sym, state, FCITX_ENTER)) {
         chewing_handle_Enter(c);
-    } else if (state == FcitxKeyState_Ctrl && FcitxHotkeyIsHotKeyDigit(sym, FcitxKeyState_None)) {
-        chewing_handle_CtrlNum(c, sym);
     } else {
-        // to do: more chewing_handle
+        // to do: more chewing_handle, but all useful keys are defined
         return IRV_TO_PROCESS;
     }
     if (chewing_keystroke_CheckAbsorb(c)) {
@@ -206,9 +208,7 @@ INPUT_RETURN_VALUE FcitxChewingDoInput(void* arg, FcitxKeySym sym, unsigned int 
 __EXPORT_API
 boolean FcitxChewingInit(void* arg)
 {
-    FcitxChewing* chewing = (FcitxChewing*) arg;
-    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCITX_LEFT);
-    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCITX_RIGHT);
+	// do we really need this function?
     return true;
 }
 
@@ -303,9 +303,9 @@ INPUT_RETURN_VALUE FcitxChewingGetCandWord(void* arg, FcitxCandidateWord* candWo
     FcitxInputState *input = FcitxInstanceGetInputState(chewing->owner);
     int page = w->index / config->iMaxCandWord;
     int off = w->index % config->iMaxCandWord;
+    
     if (page < 0 || page >= chewing_cand_TotalPage(chewing->context))
         return IRV_TO_PROCESS;
-    int lastPage = chewing_cand_CurrentPage(chewing->context);
     while (page != chewing_cand_CurrentPage(chewing->context)) {
         if (page < chewing_cand_CurrentPage(chewing->context)) {
             chewing_handle_Left(chewing->context);
@@ -313,11 +313,6 @@ INPUT_RETURN_VALUE FcitxChewingGetCandWord(void* arg, FcitxCandidateWord* candWo
         if (page > chewing_cand_CurrentPage(chewing->context)) {
             chewing_handle_Right(chewing->context);
         }
-        /* though useless, but take care if there is a bug cause freeze */
-        if (lastPage == chewing_cand_CurrentPage(chewing->context)) {
-            break;
-        }
-        lastPage = chewing_cand_CurrentPage(chewing->context);
     }
     chewing_handle_Default( chewing->context, selKey[off] );
     
@@ -363,13 +358,13 @@ void FcitxChewingDestroy(void* arg)
     free(arg);
 }
 
-void FcitxChewingReloadConfig(void* arg) {
+static void FcitxChewingReloadConfig(void* arg) {
     FcitxChewing* chewing = (FcitxChewing*) arg;
     LoadChewingConfig(&chewing->config);
     ConfigChewing(chewing);
 }
 
-boolean LoadChewingConfig(FcitxChewingConfig* fs)
+static boolean LoadChewingConfig(FcitxChewingConfig* fs)
 {
     FcitxConfigFileDesc *configDesc = GetFcitxChewingConfigDesc();
     if (!configDesc)
@@ -391,7 +386,7 @@ boolean LoadChewingConfig(FcitxChewingConfig* fs)
     return true;
 }
 
-void SaveChewingConfig(FcitxChewingConfig* fc)
+static void SaveChewingConfig(FcitxChewingConfig* fc)
 {
     FcitxConfigFileDesc *configDesc = GetFcitxChewingConfigDesc();
     FILE *fp = FcitxXDGGetFileUserWithPrefix("conf", "fcitx-chewing.config", "wt", NULL);
@@ -400,7 +395,7 @@ void SaveChewingConfig(FcitxChewingConfig* fc)
         fclose(fp);
 }
 
-void ConfigChewing(FcitxChewing* chewing)
+static void ConfigChewing(FcitxChewing* chewing)
 {
     ChewingContext* ctx = chewing->context;
     chewing_set_KBType( ctx, chewing_KBStr2Num( 
