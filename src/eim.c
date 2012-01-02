@@ -108,8 +108,6 @@ void* FcitxChewingCreate(FcitxInstance* instance)
     FcitxGlobalConfig* config = FcitxInstanceGetGlobalConfig(instance);
     FcitxInputState *input = FcitxInstanceGetInputState(instance);
     FcitxCandidateWordSetChoose(FcitxInputStateGetCandidateList(input), DIGIT_STR_CHOOSE);
-    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCITX_LEFT);
-    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCITX_RIGHT);
     
     bindtextdomain("fcitx-chewing", LOCALEDIR);
 
@@ -121,6 +119,8 @@ void* FcitxChewingCreate(FcitxInstance* instance)
     // chewing will crash without set page
     chewing_set_candPerPage(c, config->iMaxCandWord);
     FcitxCandidateWordSetPageSize(FcitxInputStateGetCandidateList(input), config->iMaxCandWord);
+    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_PREVPAGE_KEY, FCITX_LEFT);
+    FcitxInstanceSetContext(chewing->owner, CONTEXT_ALTERNATIVE_NEXTPAGE_KEY, FCITX_RIGHT);
     chewing_set_selKey(c, selKey, 10);
     LoadChewingConfig(&chewing->config);
     ConfigChewing(chewing);
