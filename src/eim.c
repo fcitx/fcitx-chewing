@@ -92,10 +92,7 @@ void* FcitxChewingCreate(FcitxInstance* instance)
         return NULL;
     
     char* user_path = NULL;
-    FILE* fp = FcitxXDGGetFileUserWithPrefix("chewing", ".place_holder", "w", NULL);
-    if (fp)
-        fclose(fp);
-    FcitxXDGGetFileUserWithPrefix("/", "chewing", NULL, &user_path);
+    FcitxXDGGetFileUserWithPrefix("chewing", "", NULL, &user_path);
     FcitxLog(INFO, "Chewing storage path %s", user_path);
     if (0 == chewing_Init(CHEWING_DATADIR, user_path)) {
         FcitxLog(DEBUG, "chewing init ok");
