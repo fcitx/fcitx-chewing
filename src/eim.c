@@ -66,19 +66,6 @@ const FcitxHotkey FCITX_CHEWING_PGUP[2] = {{NULL, FcitxKey_Page_Up, FcitxKeyStat
 const FcitxHotkey FCITX_CHEWING_PGDN[2] = {{NULL, FcitxKey_Page_Down, FcitxKeyState_None}, {NULL, FcitxKey_None, FcitxKeyState_None}};
 int selKey[10] = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
 
-const char *builtin_keymaps[] = {
-    "KB_DEFAULT",
-    "KB_HSU",
-    "KB_IBM",
-    "KB_GIN_YEIH",
-    "KB_ET",
-    "KB_ET26",
-    "KB_DVORAK",
-    "KB_DVORAK_HSU",
-    "KB_DACHEN_CP26",
-    "KB_HANYU_PINYIN"
-};
-
 /**
  * @brief initialize the extra input method
  *
@@ -386,8 +373,7 @@ static void SaveChewingConfig(FcitxChewingConfig* fc)
 static void ConfigChewing(FcitxChewing* chewing)
 {
     ChewingContext* ctx = chewing->context;
-    chewing_set_KBType( ctx, chewing_KBStr2Num( 
-                (char *) builtin_keymaps[chewing->config.layout]));
+    chewing_set_KBType( ctx, chewing->config.layout);
     chewing_set_addPhraseDirection( ctx, chewing->config.bAddPhraseForward ? 0 : 1 );
     chewing_set_phraseChoiceRearward( ctx, chewing->config.bChoiceBackward ? 1 : 0 );
     chewing_set_autoShiftCur( ctx, chewing->config.bAutoShiftCursor ? 1 : 0 );
