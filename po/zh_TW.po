@@ -8,25 +8,77 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-02 13:48+0800\n"
+"POT-Creation-Date: 2012-01-02 16:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Tai-Lin Chu <tailinchu@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"Language: zh_TW\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /home/saber/Develop/fcitx-chewing/data/fcitx-chewing.desc:4
-msgid "Priority of Chewing"
-msgstr ""
+#: /home/saber/Develop/fcitx-chewing/data/fcitx-chewing.desc:3
+msgid "Add Phrase Forward"
+msgstr "前方加詞"
+
+#: /home/saber/Develop/fcitx-chewing/data/fcitx-chewing.desc:13
+msgid "Automatically shift cursor"
+msgstr "自動移動指標到下一個字"
+
+#: /home/saber/Develop/fcitx-chewing/data/fcitx-chewing.desc:8
+msgid "Backward phrase choice"
+msgstr "反向字詞選擇"
 
 # unknown
 #: /home/saber/Develop/fcitx-chewing/build/po/tmp/fcitx-chewing.conf.in.h:1
-#: /home/saber/Develop/fcitx-chewing/build/po/../..//src/eim.c:81
+#: /home/saber/Develop/fcitx-chewing/build/po/../..//src/eim.c:129
 msgid "Chewing"
-msgstr ""
+msgstr "酷音"
 
 #: /home/saber/Develop/fcitx-chewing/build/po/tmp/fcitx-chewing.conf.in.h:2
 msgid "Chewing Wrapper For Fcitx"
-msgstr ""
+msgstr "Fcitx　的酷音封裝"
+
+#: unknown
+msgid "DACHEN_CP26 Keyboard"
+msgstr "大千26鍵盤"
+
+#: unknown
+msgid "Default Keyboard"
+msgstr "預設鍵盤"
+
+#: unknown
+msgid "Dvorak Keyboard"
+msgstr "Dvorak 鍵盤"
+
+#: unknown
+msgid "Dvorak Keyboard with Hsu's support"
+msgstr "許氏　Dvorak 鍵盤"
+
+#: unknown
+msgid "ETen Keyboard"
+msgstr "倚天鍵盤"
+
+#: unknown
+msgid "Gin-Yieh Keyboard"
+msgstr "精業鍵盤"
+
+#: unknown
+msgid "Han-Yu PinYin Keyboard"
+msgstr "漢語拼音鍵盤"
+
+#: unknown
+msgid "Hsu's Keyboard"
+msgstr "許氏鍵盤"
+
+#: unknown
+msgid "IBM Keyboard"
+msgstr "IBM 鍵盤"
+
+#: /home/saber/Develop/fcitx-chewing/data/fcitx-chewing.desc:23
+msgid "Keyboard Layout"
+msgstr "鍵盤配置"
+
+#: /home/saber/Develop/fcitx-chewing/data/fcitx-chewing.desc:18
+msgid "Space as selection key"
+msgstr "使用空白鍵選字詞"
