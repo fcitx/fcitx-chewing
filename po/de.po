@@ -4,13 +4,13 @@
 #
 # Translators:
 # mar well <m.wellendorf@gmx.de>, 2013
-# mar well <m.wellendorf@gmx.de>, 2017
+# mar well <m.wellendorf@gmx.de>, 2013,2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-07-28 06:02-0700\n"
-"PO-Revision-Date: 2017-07-28 12:46+0000\n"
+"POT-Creation-Date: 2019-11-03 12:27-0800\n"
+"PO-Revision-Date: 2018-06-19 17:54+0000\n"
 "Last-Translator: mar well <m.wellendorf@gmx.de>\n"
 "Language-Team: German (http://www.transifex.com/fcitx/fcitx/language/de/)\n"
 "Language: de\n"
@@ -29,7 +29,7 @@ msgstr "1234qweras"
 
 #: src/fcitx-chewing.desc:16
 msgid "Add Phrase Forward"
-msgstr ""
+msgstr "Phrase nach vorne hinzufügen"
 
 #: src/fcitx-chewing.desc:26
 msgid "Automatically shift cursor"
@@ -37,11 +37,11 @@ msgstr "Cursor automatisch anheben"
 
 #: src/fcitx-chewing.desc:21
 msgid "Backward phrase choice"
-msgstr ""
+msgstr "Phrase rückwärts auswählen"
 
 #: src/fcitx-chewing.desc:49
 msgid "Carpalx Keyboard"
-msgstr ""
+msgstr "Carpalx Tastatur"
 
 #: src/eim.c:149 src/chewing.conf.in:3 src/fcitx-chewing.conf.in:3
 #: src/fcitx-chewing.desc:1 src/fcitx-chewing.desc:14 src/fcitx-chewing.desc:19
