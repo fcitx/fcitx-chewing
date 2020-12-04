@@ -5,14 +5,17 @@
 # Translators:
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 # ABE Tsunehiko, 2017
+# ABE Tsunehiko, 2017
+# shirou - しろう <shirou.faw@gmail.com>, 2013
+# Takuro Onoue <kusanaginoturugi@gmail.com>, 2020
 # shirou - しろう <shirou.faw@gmail.com>, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: fcitx\n"
 "Report-Msgid-Bugs-To: fcitx-dev@googlegroups.com\n"
-"POT-Creation-Date: 2017-11-23 00:02-0800\n"
-"PO-Revision-Date: 2017-11-23 06:16+0000\n"
-"Last-Translator: ABE Tsunehiko\n"
+"POT-Creation-Date: 2020-12-05 00:02+0100\n"
+"PO-Revision-Date: 2020-12-04 10:37+0000\n"
+"Last-Translator: Takuro Onoue <kusanaginoturugi@gmail.com>\n"
 "Language-Team: Japanese (http://www.transifex.com/fcitx/fcitx/language/ja/)\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -30,15 +33,15 @@ msgstr "1234qweras"
 
 #: src/fcitx-chewing.desc:16
 msgid "Add Phrase Forward"
-msgstr ""
+msgstr "前にフレーズを追加"
 
 #: src/fcitx-chewing.desc:26
 msgid "Automatically shift cursor"
-msgstr ""
+msgstr "カーソルを自動的にシフト"
 
 #: src/fcitx-chewing.desc:21
 msgid "Backward phrase choice"
-msgstr ""
+msgstr "後方フレーズを選択"
 
 #: src/fcitx-chewing.desc:49
 msgid "Carpalx Keyboard"
